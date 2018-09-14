@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<meta charset="UTF-8">
+		<title>WebCorto</title>
+		<style>
+body {
+background: #F4F4F4 
+}
+b {
+font-size:150%;
+}
+button, input[type="submit"] {
+background-color:#4CDEF5;
+border:none;
+color:black;
+text-align: center;
+cursor:pointer;
+padding:10px 20px;
+border-radius: 10px;
+}
+input[class="refresh"] {
+background-color:#235789;
+color:white;
+}
+input[id="start"] {
+background-color:#A4D555;
+}
+input[id="stop"] {
+background-color:#FF0000;
+}
+input[id="hidden"] {
+visibility: hidden;
+}
+
+* {margin: 0; padding: 5px; }
+p {padding: 10px; }
+#left { position: absolute; left: 0; top: 0; width: 45%;}
+#right { position: absolute; right: 0; top: 0; width: 55%;}
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 25px;
+  cursor:default;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: default;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #A4D555;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #A4D555;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(32px);
+  -ms-transform: translateX(32px);
+  transform: translateX(32px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+ 
+
+</style>
+
+	</head>
+
+
+
+
+
+
+
+
+
+
+	<body>
+		<div id='left'>	
+			<h1>CORTO Web data taking interface</h1>		
+			<table>
+			<tr>
+			<td>
+				<form action="http://134.158.90.133/" target="_blank">
+					<button  type="submit">U, I, T Monitoring </button>
+				</form>
+			</td>
+			<td>
+				<form action="http://134.158.91.232/?password=pyriatyn&sw=11" target="_blank">
+					<button type="submit">Power supply switcher</button>
+				</form>
+			</td>
+			</tr>
+			</table><table>
+			<tr>
+			  <td>
+			    <h2>LAL network status</h2>
+			  </td>
+			<td>
+				<form class="switch">
+					<input type="checkbox" {{isinlan|safe}}>
+					<span class="slider round"></span>
+				</form>
+			</td>
+			<td>
+				<form action="/button1/" method="get">
+					<input class="refresh" name="button1" type="submit" value="Refresh">
+				</form>
+			</td>
+			</tr>
+			<tr>
+			<td><h2>Mounting status</h2></td><td></td>
+			
+			<td>
+			  <form action="/lunmount/" method="get">
+			    <input name="forceunm" type="submit" value="Force unmount">
+			  </form>
+			</td>
+			</tr>
+
+			<tr>	
+			<td>
+				<a>PC-SERDI6-win_C</a>
+			</td>
+			<td>
+				<form class="switch">
+					<input type="checkbox" {{cismounted|safe}}>
+					<span class="slider round"></span>
+				</form>
+			</td>
+			<td>
+				<form action="{{changestatec|safe}}" method="get">
+					<input type="submit" value="{{changelabelc|safe}}">
+				</form>
+				
+			</td>
+			</tr>
+
+			<tr>	
+			<td>
+				<a>PC-SERDI6-win_L</a>
+			</td>
+			<td>
+				<form class="switch">
+					<input type="checkbox" {{lismounted|safe}}>
+					<span class="slider round"></span>
+				</form>
+			</td>
+			<td>
+				<form action="{{changestatel|safe}}" method="get">
+					<input type="submit" value="{{changelabell|safe}}">
+				</form>
+			</td>
+			</tr>
+
+			<tr>
+			<td><h2>Crontab status</h2>
+			<td>
+				<form class="switch">
+					<input type="checkbox" {{isconvert|safe}}>
+					<span class="slider round"></span>
+				</form>
+			</td>
+			<td>
+				<form action="{{changecrontabadress}}" method="get">
+					<input type="submit" value="{{changecrontab|safe}}">
+				</form>
+			</td>
+			</tr>
+			
+			<tr><td><p style="padding-bottom:1cm;"></p></td></tr>
+			
+
+			<tr>
+			<td><h2>{{runheader|safe}}</h2></td>
+				<form action="/{{newid|safe}}run/" method="post">{% csrf_token %}
+			<td>
+			  {{runnumfield|safe}}
+			</td>
+			<td>
+			  <input id="{{newid|safe}}" type="submit"  value="{{newlabel|safe}}" {{newclickable|safe}}>
+			</td>
+				</form>
+			</tr>
+
+			<tr>	
+			<td>
+				<h2>Current run status</h2>
+			</td>
+			<td></td>
+			<td>
+				<form action="/wccheck/" method="get">
+					<input type="submit" value="Check">
+				</form>
+			</td>
+			</tr>
+
+			<tr>	
+			<td>
+				<h2>Force</h2>
+			</td>
+			<td>
+			  <form action="/forcesync/" method="get">
+			    <input type="submit" value="Sync">
+			  </form>
+			  
+			</td>
+			<td>
+			  <form action="/forceconv/" method="get">
+					<input type="submit" value="Conv">
+				</form>
+			</td>
+			</tr>
+
+			</table>
+
+
+		</div>
+		<div id='right'>
+			<br><br><br>
+			<form action="/clear/" method="get">
+				<input name="clear" type="submit" value="Clear screen">
+			</form>
+			<p style="word-spacing: 7.3px;">{{templog|safe}}</p>
+		</div>
+
+  </body>
+</html>
